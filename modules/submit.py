@@ -49,9 +49,6 @@ class Submit:
         if not re.fullmatch(r'https://www.linkedin.com/in/[A-Za-z0-9-]+', self.form.linkedin):
             print("linkedin")
             return False
-        if self.form.landed_at == 0:
-            print("landed_at")
-            return False
         if self.form.signature != self.startForm.signature:
             print("signature")
             return False
