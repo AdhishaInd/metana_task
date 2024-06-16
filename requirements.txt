@@ -1,2 +1,5 @@
 fastapi[all]
 pydantic
+phonenumbers
+sqlalchemy
+pydantic[email]

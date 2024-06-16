@@ -1,9 +1,11 @@
 from models.responseBodies import Form, StartSubmission
 
+import random
+
 class CreateForm:
     def __init__(self) -> None:
         self.form = Form(
-            id="XRAhBuOZ",
+            id=self.createId(),
             type="quiz",
             title= "Buildform demo(copy)"
         )
@@ -11,15 +13,20 @@ class CreateForm:
 
     def get_form(self):
         return self.form
+    
+    def createId(self):
+        # Create a unique id only lower case and upper case letters randomly generated
+        return ''.join(random.choices('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', k=8))
+
 
 class StartFillingForm:
-    def __init__(self) -> None:
+    def __init__(self, id: str) -> None:
         self.response = StartSubmission(
-            signature="2090686e65677664313371756f76647239786777367a34686e656776643179616b6834313339363936363463366336363533373434333536343134353337366237613339343233303664373236613737353935613431363436393336343833313337333133383334333233313335333133343963376262313231613836623765383266393637616666303263626532363461396330333839656364303263383036613036663035303834656264633739326531373138343231353134",
+            signature=self.sign(),
             submission={
                 "response_id": "hnegvd13quovdr9xgw6z4hnegvd1yakh",
                 "type": "started",
-                "form_id": "XRAhBuOZ",
+                "form_id": id,
                 "landed_at": 1718421514,
                 "visit_response_id": "ncE467A4nMS4",
                 "metadata": {
@@ -44,3 +51,7 @@ class StartFillingForm:
 
     def get_form(self):
         return self.response
+    
+    def sign(self):
+        # Create a unique numerical value that used as a signature
+        return ''.join(random.choices('0123456789', k=128))
