@@ -1,4 +1,5 @@
 from models.responseBodies import CompleteForm, StartSubmission
+from database.database import CRUD
 
 import re
 
@@ -19,28 +20,40 @@ class Submit:
 
         # Not empty not have any numbers or special characters
         if not self.form.firstname.isalpha():
+            print("firstname")
             return False   
         if not self.form.lastname.isalpha():
+            print("lastname")
             return False
         if not re.fullmatch(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b', self.form.email):
+            print("email")
             return False
         if not self.countryValidator():
+            print("country")
             return False
-        if not carrier._is_mobile(number_type(phonenumbers.parse(self.form.phonenumber))):
+        # if not carrier._is_mobile(number_type(phonenumbers.parse(self.form.phonenumber))):
+        #     print("phonenumber")
             return False
         if self.form.languages == []:
+            print("languages")
             return False
         if self.experienceValidator():
+            print("experience")
             return False
-        if self.compensationValidator():
+        # if self.compensationValidator():
+        #     print("compensation")
             return False
         if self.form.acknowledgement == False:
+            print("acknowledgement")
             return False
         if not re.fullmatch(r'https://www.linkedin.com/in/[A-Za-z0-9-]+', self.form.linkedin):
+            print("linkedin")
             return False
         if self.form.landed_at == 0:
+            print("landed_at")
             return False
         if self.form.signature != self.startForm.signature:
+            print("signature")
             return False
         
         return True
@@ -52,7 +65,7 @@ class Submit:
         return True
     
     def experienceValidator(self):
-        experiences = ["No experience (I have never programmed before.)", "Beginner (I have played with some introductory coding lessons and tutorials.)", "Intermediate (I have completed some coding classes or tutorials. D Advanced (I can build applications.)", "Professional (I am an experienced software engineer.)"]
+        experiences = ["No experience (I have never programmed before.)", "Beginner (I have played with some introductory coding lessons and tutorials.)", "Intermediate (I have completed some coding classes or tutorials", "Advanced (I can build applications.)", "Professional (I am an experienced software engineer.)"]
         if self.form.experience not in experiences:
             return False
         return True
@@ -62,3 +75,7 @@ class Submit:
         if self.form.compensation not in ranges:
             return False
         return True
+    
+    def submit(self):
+        # Insert the form to the database
+        return CRUD().insert_submission(self.form)

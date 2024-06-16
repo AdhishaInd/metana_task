@@ -6,6 +6,7 @@ from modules.createForm import CreateForm, StartFillingForm
 from modules.provider import StatProvider
 from models.responseBodies import CompleteForm
 from modules.submit import Submit
+from database.database import CRUD
 
 app = FastAPI()
 
@@ -38,13 +39,18 @@ def start_submission(formUid: str):
     if formUid not in forms:
         raise Exception("Invalid formUid")
 
-    forms[formUid] = StartFillingForm(formUid)
-    return forms[formUid].get_form()
+    forms[formUid] = StartFillingForm(formUid).get_form()
+    return forms[formUid]
 
 @app.post("/forms/{formUid}/complete-submission")
 def complete_submission(formUid: str, form: CompleteForm):
     formsubmit = Submit(form, forms[formUid])
-    return formsubmit.get_form()
+    if (formsubmit.verification()):
+        # Insert form to the database
+        formsubmit.submit()
+        return formsubmit.get_form()
+    # execption will be raised if verification fails
+    raise Exception("Invalid form")
 
 
 

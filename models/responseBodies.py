@@ -44,7 +44,7 @@ class CompleteForm(BaseModel):
     phonenumber: str
     languages: list[str]
     experience: str
-    compensation: int
+    compensation: str
     acknowledgement: bool
     linkedin: str
     landed_at: int
